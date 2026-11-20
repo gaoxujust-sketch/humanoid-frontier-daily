@@ -1,17 +1,42 @@
 <style>
-  /* ===== 日刊视觉系统：纸面感 + 衬线标题 + 卡片化条目 ===== */
+  /* ===== 日刊视觉系统 v3：深色刊眉侧栏 + 纸面正文 + 判断色标 ===== */
   :root {
     --paper: #faf8f4;
     --ink: #1f2430;
+    --ink-soft: #4a4f57;
     --accent: #9a3b26;
     --accent-soft: #f5e9e2;
     --line: #e7e0d4;
     --card-bg: #ffffff;
+    --green: #1e7d46;
+    --green-bg: #e5f3ea;
+    --amber: #9a6a00;
+    --amber-bg: #faf0d7;
+    --gray: #5f6368;
+    --gray-bg: #eceff1;
   }
   body { background: var(--paper); }
   .main { background: var(--paper); }
+
+  /* --- 左侧刊眉：深色底，标题为唯一主角 --- */
+  .side-bar { background: #191d26; }
+  .site-header { border-bottom: 1px solid rgba(255,255,255,0.12); }
+  .site-title {
+    font-family: "Songti SC", "Noto Serif SC", "STSong", serif;
+    font-size: 1.28rem !important;
+    line-height: 1.45;
+    color: #f5efe4 !important;
+    letter-spacing: 0.04em;
+  }
+  .site-title:hover { background: transparent !important; }
+  .site-nav .nav-list-link { color: #c9cdd6; }
+  .site-nav .nav-list-link:hover { background: rgba(255,255,255,0.07); color: #fff; }
+  .site-nav .nav-list-link.active { color: #fff; font-weight: 700; }
+  .site-footer { color: #8b909c; }
+
+  /* --- 正文排版 --- */
   .main-content {
-    max-width: 62rem;
+    max-width: 60rem;
     line-height: 1.85;
     font-size: 1.02rem;
     color: var(--ink);
@@ -20,18 +45,15 @@
     font-family: "Songti SC", "Noto Serif SC", "STSong", serif;
     letter-spacing: 0.01em;
   }
-  .main-content h1 { font-size: 1.9rem; line-height: 1.35; margin-bottom: 1.2rem; }
+  .main-content h1 { font-size: 1.95rem; line-height: 1.35; margin-bottom: 1.1rem; }
   .main-content h2 {
-    font-size: 1.45rem;
-    margin-top: 2.6rem;
-    padding-bottom: 0.35rem;
-    border-bottom: 2px solid var(--line);
+    font-size: 1.42rem; margin-top: 2.6rem;
+    padding-bottom: 0.35rem; border-bottom: 2px solid var(--line);
   }
-  .main-content h3 { font-size: 1.16rem; margin-top: 1.6rem; line-height: 1.55; }
+  .main-content h3 { font-size: 1.15rem; margin-top: 1.5rem; line-height: 1.55; }
   .main-content p, .main-content li { letter-spacing: 0.01em; }
   .main-content table { font-size: 0.95rem; }
   .main-content a { text-underline-offset: 0.18em; }
-  .side-bar { font-size: 0.95rem; }
 
   /* 阅读进度条 */
   #read-progress {
@@ -39,70 +61,65 @@
     background: var(--accent); z-index: 9999; transition: width 0.08s linear;
   }
 
-  /* 首页刊头 */
-  .journal-hero { text-align: left; padding: 1.2rem 0 0.4rem; }
-  .journal-kicker {
-    font-size: 0.78rem; letter-spacing: 0.22em; color: var(--accent);
-    font-weight: 700; margin-bottom: 0.6rem;
-  }
-  .journal-title { font-size: 2.5rem; line-height: 1.25; margin: 0 0 0.8rem; }
-  .journal-sub { font-size: 1.05rem; color: #4a4f57; max-width: 44rem; }
+  /* --- 首页刊头 --- */
+  .journal-hero { padding: 1.4rem 0 0.4rem; }
+  .journal-kicker { font-size: 0.78rem; letter-spacing: 0.22em; color: var(--accent); font-weight: 700; margin-bottom: 0.6rem; }
+  .journal-title { font-size: 2.6rem; line-height: 1.25; margin: 0 0 0.8rem; }
+  .journal-sub { font-size: 1.05rem; color: var(--ink-soft); max-width: 44rem; }
 
-  /* 最新一期大卡 */
   .latest-card {
     background: var(--card-bg); border: 1px solid var(--line); border-radius: 16px;
     padding: 1.6rem 1.8rem; margin: 1rem 0 0.5rem;
-    box-shadow: 0 6px 24px rgba(31, 36, 48, 0.06);
+    box-shadow: 0 6px 24px rgba(31,36,48,0.06);
   }
   .latest-label { font-size: 0.75rem; letter-spacing: 0.2em; color: var(--accent); font-weight: 700; }
-  .latest-title {
-    display: block; font-family: "Songti SC", "Noto Serif SC", serif;
-    font-size: 1.7rem; line-height: 1.4; color: var(--ink); margin: 0.5rem 0;
-    text-decoration: none;
-  }
+  .latest-title { display: block; font-family: "Songti SC", "Noto Serif SC", serif; font-size: 1.7rem; line-height: 1.4; color: var(--ink); margin: 0.5rem 0; text-decoration: none; }
   .latest-title:hover { color: var(--accent); }
-  .latest-note { color: #4a4f57; margin: 0.2rem 0 1rem; }
-  .read-btn {
-    display: inline-block; background: var(--accent); color: #fff !important;
-    padding: 0.5rem 1.2rem; border-radius: 999px; text-decoration: none; font-weight: 600;
-  }
+  .latest-note { color: var(--ink-soft); margin: 0.2rem 0 1rem; }
+  .read-btn { display: inline-block; background: var(--accent); color: #fff !important; padding: 0.5rem 1.2rem; border-radius: 999px; text-decoration: none; font-weight: 600; }
 
-  /* 往期卡片网格 */
   .issue-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 0.9rem; margin-top: 1rem; }
-  .issue-card {
-    display: flex; flex-direction: column; gap: 0.6rem;
-    background: var(--card-bg); border: 1px solid var(--line); border-radius: 14px;
-    padding: 1.1rem 1.2rem; text-decoration: none; color: var(--ink);
-  }
+  .issue-card { display: flex; flex-direction: column; gap: 0.6rem; background: var(--card-bg); border: 1px solid var(--line); border-radius: 14px; padding: 1.1rem 1.2rem; text-decoration: none; color: var(--ink); }
   .issue-card:hover { border-color: var(--accent); }
   .issue-card-title { font-family: "Songti SC", "Noto Serif SC", serif; font-size: 1.12rem; line-height: 1.45; }
   .issue-card-go { color: var(--accent); font-size: 0.9rem; font-weight: 600; }
 
-  /* 栏目格 */
   .columns-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 0.9rem; margin-top: 1rem; }
   .column-cell { background: var(--card-bg); border: 1px solid var(--line); border-radius: 14px; padding: 1rem 1.2rem; display: flex; flex-direction: column; gap: 0.3rem; }
   .column-cell strong { font-size: 1.05rem; }
-  .column-cell span { color: #4a4f57; font-size: 0.94rem; line-height: 1.6; }
+  .column-cell span { color: var(--ink-soft); font-size: 0.94rem; line-height: 1.6; }
 
-  /* 今日一判高亮框 */
+  /* --- 今日一判 --- */
   .verdict-box {
     background: var(--accent-soft); border-left: 5px solid var(--accent);
-    border-radius: 0 14px 14px 0; padding: 1.1rem 1.4rem; margin: 1rem 0;
+    border-radius: 0 14px 14px 0; padding: 1.15rem 1.4rem; margin: 1rem 0;
   }
-  .verdict-box p:first-child { font-size: 1.12rem; }
+  .verdict-box p:first-child { font-size: 1.13rem; line-height: 1.7; }
 
-  /* 每条动态的故事卡 */
+  /* --- 每条动态故事卡 --- */
   .story-card {
     background: var(--card-bg); border: 1px solid var(--line); border-radius: 14px;
-    padding: 1.15rem 1.35rem; margin: 1rem 0;
-    box-shadow: 0 2px 10px rgba(31, 36, 48, 0.04);
+    padding: 1.15rem 1.35rem 0.9rem; margin: 1rem 0;
+    box-shadow: 0 2px 10px rgba(31,36,48,0.04);
   }
-  .story-card h3 { margin-top: 0.2rem; }
+  .story-card h3 { margin-top: 0.15rem; }
   .story-card ul { margin-bottom: 0.3rem; }
-  .judge-line {
-    background: var(--accent-soft); border-radius: 8px;
-    padding: 0.35rem 0.7rem; list-style: none; margin-left: -1.4rem;
-    font-weight: 600;
+  .date-badge {
+    display: inline-block; vertical-align: 0.12em; margin-left: 0.55rem;
+    font-family: -apple-system, "PingFang SC", sans-serif;
+    font-size: 0.78rem; font-weight: 700; color: var(--accent);
+    background: var(--accent-soft); border-radius: 999px; padding: 0.08rem 0.6rem;
+    white-space: nowrap;
   }
-  .source-line a { font-weight: 600; }
+  .judge-line { list-style: none; margin-left: -1.4rem; }
+  .judge-chip {
+    display: inline-block; border-radius: 999px; padding: 0.22rem 0.75rem;
+    font-weight: 700; font-size: 0.92rem; line-height: 1.5;
+  }
+  .judge-breakthrough { background: var(--green-bg); color: var(--green); }
+  .judge-signal { background: var(--amber-bg); color: var(--amber); }
+  .judge-noise { background: var(--gray-bg); color: var(--gray); }
+  .judge-default { background: var(--accent-soft); color: var(--accent); }
+  .source-line { color: var(--ink-soft); font-size: 0.94rem; }
+  .source-line a { font-weight: 600; word-break: break-all; }
 </style>

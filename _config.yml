@@ -1,6 +1,10 @@
 title: 人形与智能前沿日刊
-description: 人形机器人全栈与通用大模型前沿 · 每日更新
+description: 每日一判 · 人形机器人 × 通用大模型
 lang: zh-CN
+
+kramdown:
+  input: GFM
+  hard_wrap: false
 
 remote_theme: just-the-docs/just-the-docs@v0.10.1
 
