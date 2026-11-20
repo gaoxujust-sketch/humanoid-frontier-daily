@@ -56,7 +56,7 @@
     if (h === verdict) return;
     var section = groupUntil(h, ['H2']);
     section.filter(function (n) { return n.tagName === 'H3'; }).forEach(function (h3) {
-      var m = h3.textContent.match(/（([^）]*?)(\d{4}-\d{2}-\d{2})([^）]*）\s*$/);
+      var m = h3.textContent.match(/（([^）]*?)(\d{4}-\d{2}-\d{2})([^）]*)）\s*$/);
       if (m) {
         var rest = (m[1] + m[3]).replace(/^[，、\s]+|[，、\s]+$/g, '').replace(/，{2,}/g, '，');
         var base = h3.textContent.replace(/（[^）]*\d{4}-\d{2}-\d{2}[^）]*）\s*$/, '');
