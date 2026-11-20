@@ -1,0 +1,66 @@
+<div id="read-progress"></div>
+<script>
+(function () {
+  // 阅读进度条
+  var bar = document.getElementById('read-progress');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    bar.style.width = pct + '%';
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // 期刊化排版：只在期次正文页生效（页面里有「今日一判」小节时）
+  var main = document.querySelector('.main-content');
+  if (!main) return;
+  var heads = Array.prototype.slice.call(main.querySelectorAll('h2'));
+  var verdict = null;
+  heads.forEach(function (h) { if (h.textContent.indexOf('今日一判') > -1) verdict = h; });
+  if (!verdict) return;
+
+  function groupUntil(startEl, stops) {
+    var nodes = [];
+    var el = startEl.nextElementSibling;
+    while (el && stops.indexOf(el.tagName) === -1) {
+      nodes.push(el);
+      el = el.nextElementSibling;
+    }
+    return nodes;
+  }
+  function wrap(nodes, cls) {
+    if (!nodes.length) return null;
+    var box = document.createElement('div');
+    box.className = cls;
+    nodes[0].parentNode.insertBefore(box, nodes[0]);
+    nodes.forEach(function (n) { box.appendChild(n); });
+    return box;
+  }
+
+  // 今日一判：整段装进高亮判词框
+  wrap(groupUntil(verdict, ['H2']), 'verdict-box');
+
+  // 各栏目下的每条动态：h3 + 其后内容装进一张故事卡
+  heads.forEach(function (h) {
+    if (h === verdict) return;
+    var section = groupUntil(h, ['H2']);
+    var h3s = section.filter(function (n) { return n.tagName === 'H3'; });
+    h3s.forEach(function (h3) {
+      var nodes = [h3];
+      var el = h3.nextElementSibling;
+      while (el && el.tagName !== 'H3' && el.tagName !== 'H2') {
+        nodes.push(el);
+        el = el.nextElementSibling;
+      }
+      var card = wrap(nodes, 'story-card');
+      if (!card) return;
+      // 判断行做成标签
+      card.querySelectorAll('li').forEach(function (li) {
+        if (li.textContent.trim().indexOf('判断：') === 0) li.classList.add('judge-line');
+        if (li.textContent.trim().indexOf('来源：') === 0) li.classList.add('source-line');
+      });
+    });
+  });
+})();
+</script>
